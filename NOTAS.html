@@ -1,0 +1,286 @@
+<div class="flex-container">
+  <h1>Alta de Cotizacion</h1>
+  <a href='cotizacion.php'>
+    <div class='icon-container' style="margin: 20px 0px;">
+      <div class='back-icon-green'></div>
+    </div>
+  </a>
+</div>
+
+<form id="form_empleados" style="width: 100%; margin-top: 0;" action="cotizacion_registro.php" method="post">
+  <div class="row" style="width: 100%; text-align: center;">
+    <hr style="width:100%;">
+    <div class="column" name="columna 1" style="margin: 0;">
+      <div class="column-format">
+        <div class="input-field">
+            <label for="quoteID">Quote ID</label>
+            <input name="quoteID" type="text" id="quoteID" required>
+        </div>
+
+        <div class="input-field">
+            <!-- Selector de Cliente -->
+            <label for="cliente">Cliente</label>
+            <div class="">
+                <div class="inline-container">
+                    <select id="cliente" name="cliente" required>
+                    <?php
+                        while ($resultado = $stmtCliente->fetch()) {
+                    ?>
+                            <option value="<?php echo $resultado->idCliente; ?>">
+                    <?php
+                                echo $resultado->nombreCliente; ?>
+                            </option>
+                    <?php
+                        }
+                    ?>
+                    </select>
+
+                    <div class="flex-container" style="display: flex; justify-content: center;">
+                        <a href="cliente.php">
+                          <div class="plus-icon"></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="input-field">
+          <label for="nombre">Nombre</label>
+          <input name="nombre" type="text" id="nombre" required>
+        </div>
+        <div class="input-field">
+          <!-- Selector de Contacto Cliente -->
+          <label for="clienteContacto">Contacto Cliente</label>
+          <div class="">
+              <div class="inline-container">
+                  <div class="inline-container" id="clienteContacto"></div>
+                  <div class="icon-container" style="display: flex; justify-content: center;">
+                      <a href="cliente_contacto.php">
+                          <div class="plus-icon"></div>
+                      </a>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <div class="input-field">
+          <label for="descripcion">Descripcion</label>
+          <textarea id="descripcion" style="width: 100%; height: 31px;" name="descripcion" rows="4" cols="50"></textarea>
+        </div>
+        <div class="input-field">
+          <!-- Selector de Categoria de Cotizacion -->
+          <label for="categoria">Categoria de Cotizacion</label>
+          <div class="">
+              <div class="inline-container">
+                  <select id='idCotizacionCategoria' name="categoria" required>
+                      <option disabled selected value> -- N/A -- </option>
+                      <?php
+                      while ($resultado = $stmtCategoria->fetch()) {
+                          ?>
+                      <option value="<?php echo $resultado->idCotizacionCategoria; ?>">
+                      <?php
+                      echo "[" . $resultado->categoria . "] [" . $resultado->nombre . "] --- " .
+                            $resultado->descripcion; ?>
+                      </option>
+                      <?php
+                      }
+                      ?>
+                  </select>
+                  <div class="icon-container">
+                      <a href="cotizacion_categoria.php">
+                          <div class="plus-icon"></div>
+                      </a>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <div class="input-field">
+          <label for="tipoCotizacion">Tipo</label>
+          <input id='idTipoCotizacion' name="tipoCotizacion" type="text" value="" disabled>
+        </div>
+        <div class="input-field">
+          <!-- Selector de Volumen -->
+          <label for="volumen">Volumen</label>
+          <div class="">
+              <div class="inline-container">
+                  <select id='idVolumen' name="volumen" required>
+                      <option disabled selected value> -- N/A -- </option>
+                  <?php
+                      while ($resultado = $stmtVolumen->fetch()) {
+                  ?>
+                          <option value="<?php echo $resultado->idCotizacionVolumen; ?>">
+                  <?php
+                              echo $resultado->nombre;
+                  ?>
+                          </option>
+                  <?php
+                      }
+                  ?>
+                  </select>
+                  <div class="icon-container" style="display: flex; justify-content: center;">
+                      <a href="cotizacion_categoria.php">
+                          <div class="plus-icon"></div>
+                      </a>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <div class="input-field">
+          <label for="hrs">Horas</label>
+          <input id='idHoras' name="hrs" type="text" value="" disabled>
+        </div>
+        <div class="input-field">
+          <label for="ventasPotenciales">Ventas Potenciales</label>
+          <input name="ventasPotenciales" type="number" min="0" value="0" step=".01" required>
+        </div>
+      </div>
+    </div>
+    <div class="column" name="columna 2" style="margin: 0;">
+      <div class="column-format">
+        <div class="input-field">
+          <!-- Selector de Responsable de Cotizaciones -->
+          <label for="responCotizaciones">Responsable de Cotizaciones</label>
+          <div class="">
+              <div class="inline-container">
+                  <select name="responCotizaciones" required>
+                      <?php
+                      while ($resultado = $stmtRespCotizaciones->fetch()) {
+                          ?>
+                      <option value="<?php echo $resultado->idEmpleado; ?>">
+                      <?php
+                      echo $resultado->numEmpleado . " - " . $resultado->nombre; ?>
+                      </option>
+                      <?php
+                      }
+                      ?>
+                  </select>
+                  <div class="icon-container" style="display: flex; justify-content: center;">
+                      <a href="empleado.php">
+                          <div class="plus-icon"></div>
+                      </a>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <div class="input-field">
+          <!-- Selector de Representante de Ventas -->
+          <label for="repreVentas">Representante de Ventas</label>
+          <div class="">
+              <div class="inline-container">
+                  <select name="repreVentas" required>
+                      <option disabled selected value> -- N/A -- </option>
+                      <?php
+                      while ($resultado = $stmtRepVentas->fetch()) {
+                          ?>
+                      <option value="<?php echo $resultado->idEmpleado; ?>">
+                      <?php
+                      echo $resultado->numEmpleado . " - " . $resultado->nombre; ?>
+                      </option>
+                      <?php
+                      }
+                      ?>
+                  </select>
+                  <div class="icon-container" style="display: flex; justify-content: center;">
+                      <a href="empleado.php">
+                          <div class="plus-icon"></div>
+                      </a>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <div class="input-field">
+          <label for="uniqueFG">Unique FG</label>
+          <input name="uniqueFG" type="number" id="uniqueFG" min="0" required>
+        </div>
+        <div class="input-field">
+          <label for="lineItems">line Items</label>
+          <input name="lineItems" type="number" min="0">
+        </div>
+        <div class="input-field">
+          <!-- Selector de Tipo de BOM -->
+          <label for="BOMType">BOM Type</label>
+          <div class="">
+              <div class="inline-container">
+                  <select name="BOMType">
+                      <option disabled selected value> -- N/A -- </option>
+                      <?php
+                      while ($resultado = $stmtBOMType->fetch()) {
+                      ?>
+                          <option value="<?php echo $resultado->idTipoCotizacion; ?>">
+                      <?php
+                          echo $resultado->categoria . " --- [" . $resultado->complex . "] --- [" .
+                                $resultado->nombre . "] --- " .$resultado->descripcion; ?>
+                          </option>
+                      <?php
+                      }
+                      ?>
+                  </select>
+                  <div class="icon-container">
+                      <a href="tipo_cotizacion.php">
+                          <div class="plus-icon"></div>
+                      </a>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <div class="input-field">
+          <!-- Campo % Completado -->
+          <label for="overallComplet">Overall Completation</label>
+          <input name="overallComplet" type="number" min="0" value="0" step=".01" required>
+        </div>
+        <div class="input-field">
+          <!-- Selector de Status -->
+          <label for="status">Status</label>
+          <div class="">
+              <div class="inline-container">
+                  <select name="status" required>
+                      <?php
+                      while ($resultado = $stmtStatus->fetch()) {
+                          ?>
+                      <option value="<?php echo $resultado->idStatus; ?>">
+                      <?php
+                      echo $resultado->nombre; ?>
+                      </option>
+                      <?php
+                      }
+                      ?>
+                  </select>
+                  <div class="icon-container" style="display: flex; justify-content: center;">
+                      <a href="status.php">
+                          <div class="plus-icon"></div>
+                      </a>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="column" name="columna 3" style="margin: 0;">
+      <div class="column-format">
+        <div class="input-field">
+          <!-- Notas -->
+          <label for="notas">Notas</label>
+          <textarea id="notas" name="notas" rows="4" cols="50"></textarea>
+        </div>
+        <div class="input-field">
+          <label for="fechaInicio">Fecha de inicio:</label>
+          <input type="date" id="fechaInicio" name="fechaInicio" value="" min="2021-01-01">
+        </div>
+        <div class="input-field">
+          <label for="fechaLanzamiento">Fecha Lanzamiento:</label>
+          <input type="date" id="fechaLanzamiento" name="fechaLanzamiento" value="" min="2021-01-01">
+        </div>
+        <div class="input-field">
+          <label for="fechaReqCliente">Fecha Requerida por Cliente:</label>
+          <input type="date" id="fechaReqCliente" name="fechaReqCliente" value="" min="2021-01-01">
+        </div>
+        <div class="input-field">
+          <label for="consolidatedEAU">Consolidated EAU</label>
+          <input name="consolidatedEAU" type="text" value="">
+        </div>
+      </div>
+    </div>
+    <hr style="width:100%;">
+    <input type="submit" style="width: 30%; text-align: center;" value="Registrar">
+  </div>
+</form>
+
+<div class="flex-container" style="height: 80px;"></div>

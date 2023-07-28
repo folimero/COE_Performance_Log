@@ -1251,10 +1251,10 @@
                                                   proyecto.projectID,
                                                   proyecto.nombre,
                                                   proyecto.descripcion,
-                                                  IFNULL(tipoproyecto.horas, 0) AS hrs,
-                                                  IFNULL(proyecto.sobreCarga, 0) AS overLoad,
+                                                  ROUND(IFNULL(tipoproyecto.horas, 0),2) AS hrs,
+                                                  ROUND(IFNULL(proyecto.sobreCarga, 0),2) AS overLoad,
                                                   (
-                                                      IFNULL(tipoproyecto.horas, 0) + IFNULL(proyecto.sobreCarga, 0)
+                                                      ROUND(IFNULL(tipoproyecto.horas, 0) + IFNULL(proyecto.sobreCarga, 0),2)
                                                   ) AS total,
                                                   proyecto.isApplication
                                               FROM
@@ -1296,16 +1296,18 @@
                         <th>Year</th>
                         <th>Week</th>
                         <th>Hrs</th>
+                        <th>Resource</th>
                         <th>Name</th>
                         <th>Description</th>
                         <th>Type</th>
                       </tr>
                       <tr>
-                        <th>ID</th>
+                      <th>ID</th>
                         <th>Date</th>
                         <th>Year</th>
                         <th>Week</th>
                         <th>Hrs</th>
+                        <th>Resource</th>
                         <th>Name</th>
                         <th>Description</th>
                         <th>Type</th>
@@ -1319,6 +1321,7 @@
                         <th>Year</th>
                         <th>Week</th>
                         <th>Hrs</th>
+                        <th>Resource</th>
                         <th>Name</th>
                         <th>Description</th>
                         <th>Type</th>
@@ -1335,68 +1338,100 @@
                                                 proyecto.nombre,
                                                 proyecto.descripcion,
                                                 proyecto.isApplication,
-                                                actividades_proyecto.fechaEntrega AS apFechaEntrega,
+                                                DATE(actividades_proyecto.fechaEntrega) AS apFechaEntrega,
                                                 WEEK(actividades_proyecto.fechaEntrega) AS apWeek,
                                                 YEAR(actividades_proyecto.fechaEntrega) AS apYear,
                                                 (
-                                                    (
-                                                        tipoproyecto.horas + IFNULL(proyecto.sobreCarga, 0)
-                                                    ) / IF(
+                                                    ROUND(
                                                         (
-                                                            SELECT
-                                                                COUNT(*)
-                                                            FROM
-                                                                actividades_proyecto AS ap
-                                                            WHERE
-                                                                ap.idActividades_proyecto = actividades_proyecto.idActividades_proyecto
-                                                        ) = 0,
-                                                        1,
-                                                        (
-                                                            SELECT
-                                                                COUNT(*)
-                                                            FROM
-                                                                actividades_proyecto AS ap
-                                                            WHERE
-                                                                ap.idActividades_proyecto = actividades_proyecto.idActividades_proyecto
-                                                        )
+                                                            tipoproyecto.horas + IFNULL(proyecto.sobreCarga, 0)
+                                                        ) / IF(
+                                                            (
+                                                                SELECT
+                                                                    COUNT(*)
+                                                                FROM
+                                                                    actividades_proyecto AS ap
+                                                                WHERE
+                                                                    ap.idActividades_proyecto = actividades_proyecto.idActividades_proyecto
+                                                            ) = 0,
+                                                            1,
+                                                            (
+                                                                SELECT
+                                                                    COUNT(*)
+                                                                FROM
+                                                                    actividades_proyecto AS ap
+                                                                WHERE
+                                                                    ap.idActividades_proyecto = actividades_proyecto.idActividades_proyecto
+                                                            )
+                                                        ),
+                                                        2
                                                     )
                                                 ) AS apHrs,
-                                                ara.fechaEntrega AS araFechaEntrega,
+                                                DATE(ara.fechaEntrega) AS araFechaEntrega,
                                                 WEEK(ara.fechaEntrega) AS araWeek,
                                                 YEAR(ara.fechaEntrega) AS araYear,
                                                 (
-                                                    (
-                                                        tipoproyecto.horas + IFNULL(proyecto.sobreCarga, 0)
-                                                    ) / IF(
+                                                    ROUND(
                                                         (
-                                                            SELECT
-                                                                COUNT(*)
-                                                            FROM
-                                                                actividad_recursos_adicionales araIN
-                                                                INNER JOIN actividades_proyecto AS apIN ON araIN.idActividades_proyecto = apIN.idActividades_proyecto
-                                                            WHERE
-                                                                apIN.idProyecto = proyecto.idProyecto
-                                                        ) = 0,
-                                                        1,
-                                                        (
-                                                            SELECT
-                                                                COUNT(*)
-                                                            FROM
-                                                                actividad_recursos_adicionales araIN
-                                                                INNER JOIN actividades_proyecto AS apIN ON araIN.idActividades_proyecto = apIN.idActividades_proyecto
-                                                            WHERE
-                                                                apIN.idProyecto = proyecto.idProyecto
-                                                        )
+                                                            tipoproyecto.horas + IFNULL(proyecto.sobreCarga, 0)
+                                                        ) / IF(
+                                                            (
+                                                                SELECT
+                                                                    COUNT(*)
+                                                                FROM
+                                                                    actividad_recursos_adicionales araIN
+                                                                    INNER JOIN actividades_proyecto AS apIN ON araIN.idActividades_proyecto = apIN.idActividades_proyecto
+                                                                WHERE
+                                                                    apIN.idProyecto = proyecto.idProyecto
+                                                            ) = 0,
+                                                            1,
+                                                            (
+                                                                SELECT
+                                                                    COUNT(*)
+                                                                FROM
+                                                                    actividad_recursos_adicionales araIN
+                                                                    INNER JOIN actividades_proyecto AS apIN ON araIN.idActividades_proyecto = apIN.idActividades_proyecto
+                                                                WHERE
+                                                                    apIN.idProyecto = proyecto.idProyecto
+                                                            )
+                                                        ),
+                                                        2
                                                     )
-                                                ) AS araHrs
+                                                ) AS araHrs,
+                                                empleado.nombre AS eNombre
                                             FROM
                                                 proyecto
                                                 INNER JOIN tipoproyecto ON proyecto.idTipoProyecto = tipoproyecto.idTipoProyecto
                                                 INNER JOIN actividades_proyecto ON proyecto.idProyecto = actividades_proyecto.idProyecto
                                                 LEFT JOIN actividad_recursos_adicionales AS ara ON actividades_proyecto.idActividades_proyecto = ara.idActividades_proyecto
+                                                INNER JOIN usuario ON ara.idUsuario = usuario.idUsuario
+                                                INNER JOIN empleado ON usuario.idEmpleado = empleado.idEmpleado
                                             WHERE
                                                 actividades_proyecto.fechaEntrega IS NOT NULL
                                                 OR ara.fechaEntrega IS NOT NULL
+                                            UNION ALL
+                                            SELECT
+                                                DATE(proyecto.fechaInicio) AS fechaInicio,
+                                                YEAR(proyecto.fechaInicio) AS anio,
+                                                WEEK(proyecto.fechaInicio) AS week,
+                                                proyecto.projectID,
+                                                proyecto.nombre,
+                                                proyecto.descripcion,
+                                                proyecto.isApplication,
+                                                DATE(proyecto_soporte_adicional.fechaSoporte) AS apFechaEntrega,
+                                                WEEK(proyecto_soporte_adicional.fechaSoporte) AS apWeek,
+                                                YEAR(proyecto_soporte_adicional.fechaSoporte) AS apYear,
+                                                ROUND(proyecto_soporte_adicional.horas, 2) AS apHrs,
+                                                DATE(proyecto_soporte_adicional.fechaSoporte) AS araFechaEntrega,
+                                                WEEK(proyecto_soporte_adicional.fechaSoporte) AS araWeek,
+                                                YEAR(proyecto_soporte_adicional.fechaSoporte) AS araYear,
+                                                ROUND(proyecto_soporte_adicional.horas, 2) AS araHrs,
+                                                empleado.nombre AS eNombre
+                                            FROM
+                                                proyecto_soporte_adicional
+                                                INNER JOIN proyecto ON proyecto_soporte_adicional.idProyecto = proyecto.idProyecto
+                                                INNER JOIN usuario ON proyecto_soporte_adicional.idUsuario = usuario.idUsuario
+                                                INNER JOIN empleado ON usuario.idEmpleado = empleado.idEmpleado
                                             ORDER BY
                                                 anio DESC,
                                                 week DESC");
@@ -1416,6 +1451,7 @@
                                   echo "<td>". $resultado->apHrs . "</td>";
                               }
 
+                              echo "<td>". $resultado->eNombre . "</td>";
                               echo "<td>". $resultado->nombre . "</td>";
                               echo "<td>". $resultado->descripcion . "</td>";
                               if($resultado->isApplication == 1){

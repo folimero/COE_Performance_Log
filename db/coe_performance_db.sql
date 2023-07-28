@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 5.0.3
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-07-2023 a las 19:08:11
--- Versión del servidor: 10.1.38-MariaDB
--- Versión de PHP: 7.3.2
+-- Tiempo de generación: 26-07-2023 a las 16:01:40
+-- Versión del servidor: 10.4.14-MariaDB
+-- Versión de PHP: 7.4.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -36,10 +35,10 @@ CREATE TABLE `actividad` (
   `horasLow` decimal(10,2) NOT NULL,
   `horasMid` decimal(10,2) NOT NULL,
   `horasHigh` decimal(10,2) NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp(),
   `idEtapa` int(11) NOT NULL,
   `resp` varchar(2) NOT NULL,
-  `obsoleta` tinyint(4) NOT NULL DEFAULT '0'
+  `obsoleta` tinyint(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -196,12 +195,12 @@ CREATE TABLE `actividades_proyecto` (
   `idActividades_proyecto` int(11) NOT NULL,
   `idProyecto` int(11) NOT NULL,
   `idActividad` int(11) NOT NULL,
-  `fechaInicio` datetime DEFAULT CURRENT_TIMESTAMP,
+  `fechaInicio` datetime DEFAULT current_timestamp(),
   `fechaRequerida` datetime DEFAULT NULL,
   `fechaEntrega` datetime DEFAULT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `completado` tinyint(1) NOT NULL DEFAULT '0',
-  `notas` text,
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp(),
+  `completado` tinyint(1) NOT NULL DEFAULT 0,
+  `notas` text DEFAULT NULL,
   `entregadoPor` int(11) DEFAULT NULL,
   `ubicacion` varchar(300) DEFAULT NULL,
   `fechaAprobacion` datetime DEFAULT NULL,
@@ -3263,7 +3262,7 @@ CREATE TABLE `actividad_dependencia` (
   `idActividadDependencia` int(11) NOT NULL,
   `idActividad` int(11) NOT NULL,
   `idActRequerida` int(11) NOT NULL,
-  `createdDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdDate` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -3373,12 +3372,12 @@ CREATE TABLE `actividad_recursos_adicionales` (
   `idRecursosAdicionales` int(11) NOT NULL,
   `idActividades_proyecto` int(11) NOT NULL,
   `idUsuario` int(11) NOT NULL,
-  `fechaInicio` datetime DEFAULT CURRENT_TIMESTAMP,
+  `fechaInicio` datetime DEFAULT current_timestamp(),
   `fechaRequerida` datetime DEFAULT NULL,
   `fechaEntrega` datetime DEFAULT NULL,
   `ubicacion` varchar(300) COLLATE utf8_unicode_ci NOT NULL,
   `comentarios` varchar(300) COLLATE utf8_unicode_ci NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -3447,7 +3446,7 @@ INSERT INTO `actividad_recursos_adicionales` (`idRecursosAdicionales`, `idActivi
 (133, 5428, 20, '2023-04-13 16:13:08', NULL, '2023-04-19 08:46:10', 'I:\\Ingenieria\\HHJ ALTERNATIVE MATERIAL PLAN\\Alternative tracker 2022\\Actividades de AE\\W 16', '', '2023-04-13 16:13:08'),
 (134, 5429, 21, '2023-04-14 10:23:51', NULL, '2023-04-17 07:48:19', 'I:\\Ingenieria\\HHJ ALTERNATIVE MATERIAL PLAN\\Alternative tracker 2022\\Actividades de AE\\W 15', '', '2023-04-14 10:23:51'),
 (135, 5430, 21, '2023-04-17 07:40:34', NULL, '2023-04-17 07:46:14', 'I:\\Ingenieria\\HHJ ALTERNATIVE MATERIAL PLAN\\Alternative tracker 2022\\Actividades de AE\\W16', '', '2023-04-17 07:40:34'),
-(136, 5431, 19, '2023-04-17 00:00:00', '2023-04-21 00:00:00', '2023-04-24 15:17:35', 'I:\\Ingenieria\\npi\\CAD\\Drawings Database\\Jabil-SALTMED\\20230417_00', '', '2023-04-17 08:26:24'),
+(136, 5431, 19, '2023-04-17 00:00:00', '2023-04-21 00:00:00', '2023-07-26 08:43:37', 'I:\\Ingenieria\\npi\\CAD\\Drawings Database\\Jabil-SALTMED\\20230417_00', '', '2023-04-17 08:26:24'),
 (140, 5433, 20, '2023-04-17 00:00:00', '2023-04-21 00:00:00', '2023-04-19 08:43:37', 'I:\\Ingenieria\\HHJ ALTERNATIVE MATERIAL PLAN\\Alternative tracker 2022\\Actividades de AE\\W 16', '', '2023-04-17 08:44:41'),
 (141, 5434, 21, '2023-04-17 14:40:41', NULL, '2023-04-19 08:39:50', 'I:\\Ingenieria\\HHJ ALTERNATIVE MATERIAL PLAN\\Alternative tracker 2022\\Actividades de AE\\W 16', '', '2023-04-17 14:40:41'),
 (142, 5435, 20, '2023-04-17 14:43:09', NULL, '2023-04-19 08:42:16', 'I:\\Ingenieria\\HHJ ALTERNATIVE MATERIAL PLAN\\Alternative tracker 2022\\Actividades de AE\\W 16', '', '2023-04-17 14:43:09'),
@@ -3712,7 +3711,8 @@ INSERT INTO `actividad_recursos_adicionales` (`idRecursosAdicionales`, `idActivi
 (428, 5970, 20, '2023-07-11 15:45:42', NULL, NULL, '', '', '2023-07-11 15:45:42'),
 (429, 5971, 24, '2023-07-12 13:40:26', NULL, '2023-07-12 13:40:42', 'I:\\Ingenieria\\HHJ ALTERNATIVE MATERIAL PLAN\\Alternative tracker 2022\\Actividades de AE\\W 28', '', '2023-07-12 13:40:26'),
 (430, 5972, 24, '2023-07-12 16:55:46', NULL, '2023-07-12 16:56:08', 'I:\\Ingenieria\\HHJ ALTERNATIVE MATERIAL PLAN\\Alternative tracker 2022\\Actividades de AE\\W 28', '', '2023-07-12 16:55:46'),
-(431, 5973, 24, '2023-07-13 09:44:46', NULL, '2023-07-13 09:45:00', 'I:\\Ingenieria\\HHJ ALTERNATIVE MATERIAL PLAN\\Alternative tracker 2022\\Actividades de AE\\W 28', '', '2023-07-13 09:44:46');
+(431, 5973, 24, '2023-07-13 09:44:46', NULL, '2023-07-13 09:45:00', 'I:\\Ingenieria\\HHJ ALTERNATIVE MATERIAL PLAN\\Alternative tracker 2022\\Actividades de AE\\W 28', '', '2023-07-13 09:44:46'),
+(432, 5961, 1, '2023-07-25 09:40:03', NULL, NULL, '', '', '2023-07-25 09:40:03');
 
 -- --------------------------------------------------------
 
@@ -3736,7 +3736,7 @@ CREATE TABLE `alternativo` (
   `idAlternativoStatus` int(11) NOT NULL,
   `aprobadoPorCliente` tinyint(1) DEFAULT NULL,
   `link` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -3757,7 +3757,7 @@ INSERT INTO `alternativo` (`idAlternativo`, `idMotivo`, `idNegocioVieneDeUsuario
 CREATE TABLE `alternativo_motivo` (
   `idAlternativoMotivo` int(11) NOT NULL,
   `nombre` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp(),
   `creadoPor` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -3785,7 +3785,7 @@ CREATE TABLE `alternativo_spec` (
   `tamano` int(11) NOT NULL,
   `subidoPor` int(11) NOT NULL,
   `idAlternativo` int(11) NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -3797,7 +3797,7 @@ CREATE TABLE `alternativo_spec` (
 CREATE TABLE `alternativo_status` (
   `idAlternativoStatus` int(11) NOT NULL,
   `nombre` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp(),
   `creadoPor` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -3819,7 +3819,7 @@ INSERT INTO `alternativo_status` (`idAlternativoStatus`, `nombre`, `fechaCrea`, 
 CREATE TABLE `alternativo_tipo` (
   `idAlternativoTipo` int(11) NOT NULL,
   `nombre` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp(),
   `creadoPor` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -3876,8 +3876,8 @@ INSERT INTO `alternativo_tipo` (`idAlternativoTipo`, `nombre`, `fechaCrea`, `cre
 CREATE TABLE `capacidad` (
   `idCapacidad` int(11) NOT NULL,
   `nombreCapacidad` varchar(50) NOT NULL,
-  `descripcion` text,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `descripcion` text DEFAULT NULL,
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -4088,7 +4088,7 @@ CREATE TABLE `cap_requeridas` (
   `idCapRequeridas` int(11) NOT NULL,
   `idProyecto` int(11) NOT NULL,
   `idCapacidad` int(11) NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -4100,7 +4100,7 @@ CREATE TABLE `cap_requeridas` (
 CREATE TABLE `carrier` (
   `idCarrier` int(11) NOT NULL,
   `nombreCarrier` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -4121,8 +4121,8 @@ INSERT INTO `carrier` (`idCarrier`, `nombreCarrier`, `fechaCrea`) VALUES
 CREATE TABLE `cliente` (
   `idCliente` int(11) NOT NULL,
   `nombreCliente` varchar(50) NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `comentarios` text
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp(),
+  `comentarios` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -4212,7 +4212,7 @@ CREATE TABLE `cliente_contacto` (
   `activo` tinyint(1) NOT NULL,
   `email` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `telefono` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -4303,7 +4303,7 @@ CREATE TABLE `complejidad` (
   `idComplejidad` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
   `horas` decimal(10,1) NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -4326,25 +4326,25 @@ CREATE TABLE `cotizacion` (
   `quoteID` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `idCliente` int(11) NOT NULL,
   `nombre` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `descripcion` text COLLATE utf8_unicode_ci,
+  `descripcion` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `customerProject` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `idTipoCotizacion` int(11) NOT NULL,
   `ventasPotenciales` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `idClienteContacto` int(11) DEFAULT NULL,
   `idResponsable` int(11) NOT NULL,
   `idRepreVentas` int(11) DEFAULT NULL,
-  `uniqueFG` int(11) NOT NULL DEFAULT '0',
+  `uniqueFG` int(11) NOT NULL DEFAULT 0,
   `lineItems` int(11) DEFAULT NULL,
   `BOMType` int(11) DEFAULT NULL,
-  `overallComplet` decimal(10,3) NOT NULL DEFAULT '0.000',
+  `overallComplet` decimal(10,3) NOT NULL DEFAULT 0.000,
   `idStatus` int(11) NOT NULL,
-  `notas` text COLLATE utf8_unicode_ci,
+  `notas` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `fechaInicio` datetime DEFAULT NULL,
   `fechaLanzamiento` datetime DEFAULT NULL,
   `fechaReqCliente` datetime DEFAULT NULL,
   `consolidatedEAU` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `awarded` tinyint(1) DEFAULT '0',
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp(),
+  `awarded` tinyint(1) DEFAULT 0,
   `dateBDM` datetime DEFAULT NULL,
   `dateAwarded` datetime DEFAULT NULL,
   `consOTC` tinyint(1) DEFAULT NULL,
@@ -4633,7 +4633,7 @@ CREATE TABLE `cotizacion_archivo` (
   `aprobadoPor` int(11) DEFAULT NULL,
   `aprobadoEn` datetime DEFAULT NULL,
   `idCotizacion` int(11) NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -5051,7 +5051,7 @@ CREATE TABLE `cotizacion_categoria` (
   `categoria` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `descripcion` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `idComplejidad` int(11) NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -5079,9 +5079,9 @@ CREATE TABLE `cotizacion_ensambles` (
   `numParte` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `descripcion` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `eau` int(11) DEFAULT NULL,
-  `selling_price` float NOT NULL DEFAULT '0',
-  `notas` text COLLATE utf8_unicode_ci,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `selling_price` float NOT NULL DEFAULT 0,
+  `notas` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp(),
   `idCotizacion` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -5547,7 +5547,7 @@ CREATE TABLE `cotizacion_notas` (
   `nota` text COLLATE utf8_unicode_ci NOT NULL,
   `idUsuario` int(11) NOT NULL,
   `idCotizacion` int(11) NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -5969,7 +5969,7 @@ INSERT INTO `cotizacion_notas` (`idCotizacionNota`, `nota`, `idUsuario`, `idCoti
 CREATE TABLE `cotizacion_volumen` (
   `idCotizacionVolumen` int(11) NOT NULL,
   `nombre` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -5992,7 +5992,7 @@ CREATE TABLE `cuenta` (
   `idCarrier` int(11) NOT NULL,
   `cuenta` varchar(50) NOT NULL,
   `idCliente` int(11) NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -6012,7 +6012,7 @@ CREATE TABLE `departamento` (
   `idDepartamento` int(11) NOT NULL,
   `nombre` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `descripcion` text COLLATE utf8_unicode_ci NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -6051,11 +6051,11 @@ CREATE TABLE `empleado` (
   `idEmpleado` int(11) NOT NULL,
   `numEmpleado` varchar(10) NOT NULL,
   `nombre` varchar(50) NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp(),
   `correo` varchar(30) NOT NULL,
   `celular` varchar(10) DEFAULT NULL,
   `activo` tinyint(1) NOT NULL,
-  `notas` text,
+  `notas` text DEFAULT NULL,
   `idPuesto` int(11) NOT NULL,
   `idDepartamento` int(11) NOT NULL,
   `asignableAct` tinyint(1) DEFAULT NULL,
@@ -6067,7 +6067,7 @@ CREATE TABLE `empleado` (
 --
 
 INSERT INTO `empleado` (`idEmpleado`, `numEmpleado`, `nombre`, `fechaCrea`, `correo`, `celular`, `activo`, `notas`, `idPuesto`, `idDepartamento`, `asignableAct`, `asignableAsResp`) VALUES
-(1, '15179', 'Kain Abdala', '2021-05-05 19:06:12', 'kabdala@nai-group.com', '6622689700', 0, NULL, 14, 10, 0, 0),
+(1, '15179', 'Kain Abdala', '2021-05-05 19:06:12', 'kabdala@nai-group.com', '6622689700', 1, NULL, 14, 10, 0, 0),
 (4, '1685', 'Lizeth Denice Amparano Ballesteros', '2021-05-05 19:38:10', 'lamparano@nai-group.com', '', 0, NULL, 3, 7, 0, NULL),
 (5, '10098', 'Adriana Dinorah Fuentes Rios', '2021-05-05 19:38:10', 'afuentes@nai-group.com', '', 0, NULL, 3, 8, 0, NULL),
 (8, '15385', 'Maria Fernanda Sosa Sandoval', '2021-05-05 19:39:32', '', '', 0, NULL, 3, 7, 0, NULL),
@@ -6161,8 +6161,8 @@ CREATE TABLE `ensambles` (
   `workorder` varchar(30) DEFAULT NULL,
   `cantReq` int(11) NOT NULL,
   `cantTerm` int(11) NOT NULL,
-  `notas` text,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `notas` text DEFAULT NULL,
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp(),
   `idProyecto` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -6749,8 +6749,8 @@ INSERT INTO `ensambles` (`idEnsamble`, `numParte`, `workorder`, `cantReq`, `cant
 CREATE TABLE `etapa` (
   `idEtapa` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
-  `descripcion` text,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `descripcion` text DEFAULT NULL,
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -6786,7 +6786,7 @@ CREATE TABLE `historial` (
 CREATE TABLE `manufacturador` (
   `idManufacturador` int(11) NOT NULL,
   `nombre` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp(),
   `creadoPor` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -6935,8 +6935,8 @@ INSERT INTO `manufacturador` (`idManufacturador`, `nombre`, `fechaCrea`, `creado
 CREATE TABLE `permiso` (
   `idPermiso` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
-  `descripcion` text,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `descripcion` text DEFAULT NULL,
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -7359,7 +7359,7 @@ CREATE TABLE `proyecto` (
   `projectID` varchar(30) NOT NULL,
   `idCliente` int(11) NOT NULL,
   `nombre` varchar(50) DEFAULT NULL,
-  `descripcion` text,
+  `descripcion` text DEFAULT NULL,
   `cobrarA` varchar(30) NOT NULL,
   `ventasPotenciales` decimal(10,2) DEFAULT NULL,
   `PO` varchar(30) DEFAULT NULL,
@@ -7376,17 +7376,17 @@ CREATE TABLE `proyecto` (
   `fechaInicio` datetime DEFAULT NULL,
   `fechaTermino` datetime DEFAULT NULL,
   `tiempoVida` decimal(10,0) DEFAULT NULL,
-  `notas` text,
+  `notas` text DEFAULT NULL,
   `currentStage` int(11) NOT NULL,
   `idStatus` int(11) NOT NULL,
   `idUsuario` int(11) NOT NULL,
   `appTrackID` varchar(30) DEFAULT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp(),
   `longestMaterial` varchar(50) DEFAULT NULL,
   `longestETA` datetime DEFAULT NULL,
-  `prioridad` tinyint(2) NOT NULL DEFAULT '0',
+  `prioridad` tinyint(2) NOT NULL DEFAULT 0,
   `idTipoProyecto` int(11) NOT NULL,
-  `overallComplet` decimal(10,3) NOT NULL DEFAULT '0.000',
+  `overallComplet` decimal(10,3) NOT NULL DEFAULT 0.000,
   `idRepreVentas` int(11) DEFAULT NULL,
   `awarded` tinyint(1) DEFAULT NULL,
   `dateAwarded` datetime DEFAULT NULL,
@@ -7395,7 +7395,7 @@ CREATE TABLE `proyecto` (
   `idGerenteProyecto` int(11) DEFAULT NULL,
   `idCoordinadorProyecto` int(11) DEFAULT NULL,
   `idIngenieroQA` int(11) DEFAULT NULL,
-  `isApplication` tinyint(1) DEFAULT '0',
+  `isApplication` tinyint(1) DEFAULT 0,
   `idProyectoRequester` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -8016,10 +8016,10 @@ CREATE TABLE `proyecto_aprobador_etapa` (
   `idProyectoEtapa` int(11) NOT NULL,
   `idUsuario` int(11) NOT NULL,
   `idRol` int(11) NOT NULL,
-  `approved` tinyint(1) NOT NULL DEFAULT '0',
+  `approved` tinyint(1) NOT NULL DEFAULT 0,
   `razon` text COLLATE utf8_unicode_ci NOT NULL,
   `fechaAprobacion` datetime DEFAULT NULL,
-  `createdDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdDate` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -8087,7 +8087,7 @@ CREATE TABLE `proyecto_categoria` (
   `categoria` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `descripcion` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `scope` text COLLATE utf8_unicode_ci NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -8115,9 +8115,9 @@ CREATE TABLE `proyecto_etapa` (
   `idProyectoEtapa` int(11) NOT NULL,
   `idProyecto` int(11) NOT NULL,
   `idEtapa` int(11) NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '0',
+  `status` tinyint(4) NOT NULL DEFAULT 0,
   `approvedDate` datetime DEFAULT NULL,
-  `createdDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdDate` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -8149,7 +8149,7 @@ CREATE TABLE `proyecto_notas` (
   `nota` text COLLATE utf8_unicode_ci NOT NULL,
   `idUsuario` int(11) NOT NULL,
   `idProyecto` int(11) NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -8758,7 +8758,7 @@ INSERT INTO `proyecto_notas` (`idProyectoNota`, `nota`, `idUsuario`, `idProyecto
 CREATE TABLE `proyecto_requester` (
   `idProyectoRequester` int(11) NOT NULL,
   `nombre` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -8781,7 +8781,7 @@ CREATE TABLE `proyecto_servicio` (
   `idProyectoServicio` int(11) NOT NULL,
   `servicio` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `descripcion` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -8803,6 +8803,40 @@ INSERT INTO `proyecto_servicio` (`idProyectoServicio`, `servicio`, `descripcion`
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `proyecto_soporte_adicional`
+--
+
+CREATE TABLE `proyecto_soporte_adicional` (
+  `idSoporteAdicional` int(11) NOT NULL,
+  `idProyecto` int(11) NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  `horas` int(11) NOT NULL,
+  `fechaSoporte` datetime NOT NULL,
+  `comentarios` varchar(300) DEFAULT NULL,
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `proyecto_soporte_adicional`
+--
+
+INSERT INTO `proyecto_soporte_adicional` (`idSoporteAdicional`, `idProyecto`, `idUsuario`, `horas`, `fechaSoporte`, `comentarios`, `fechaCrea`) VALUES
+(1, 728, 19, 15, '2023-07-24 09:17:34', 'asd', '0000-00-00 00:00:00'),
+(2, 728, 7, 3, '2023-07-25 09:17:34', 'ASDQW adWDWD', '0000-00-00 00:00:00'),
+(7, 728, 1, 500, '2023-06-27 00:00:00', 'ASDASD', '2023-07-25 11:17:58'),
+(8, 670, 1, 15, '2023-07-18 00:00:00', NULL, '2023-07-25 19:57:30'),
+(9, 670, 3, 50, '2023-07-10 00:00:00', NULL, '2023-07-25 19:57:39'),
+(10, 670, 14, 3, '2023-07-05 00:00:00', NULL, '2023-07-25 19:57:48'),
+(11, 670, 14, 100, '2023-07-13 00:00:00', NULL, '2023-07-25 20:28:00'),
+(12, 670, 23, 55, '2023-07-25 00:00:00', 'asd', '2023-07-26 06:22:47'),
+(13, 698, 23, 30, '2023-07-01 00:00:00', 'ASD ASDASD', '2023-07-26 06:46:08'),
+(15, 698, 14, 23, '2023-07-06 00:00:00', 'ASDQWDW', '2023-07-26 06:47:34'),
+(17, 738, 3, 300, '2023-07-26 00:00:00', NULL, '2023-07-26 06:49:09'),
+(18, 738, 23, 66, '2023-07-10 00:00:00', NULL, '2023-07-26 06:49:20');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `puesto`
 --
 
@@ -8810,8 +8844,8 @@ CREATE TABLE `puesto` (
   `idPuesto` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
   `descripcion` text NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `responsabilidades` text
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp(),
+  `responsabilidades` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -8860,7 +8894,7 @@ CREATE TABLE `recursos_asignados` (
   `idEmpleado` int(11) NOT NULL,
   `fechaInicio` datetime NOT NULL,
   `horas` decimal(10,1) NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -10045,7 +10079,7 @@ CREATE TABLE `rol_aprobador` (
   `idRol` int(11) NOT NULL,
   `nombre` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
   `descripcion` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `createdDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdDate` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -10068,7 +10102,7 @@ CREATE TABLE `status` (
   `idStatus` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
   `descripcion` text NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -10098,11 +10132,11 @@ CREATE TABLE `ticket` (
   `dueDate` datetime DEFAULT NULL,
   `completedDate` datetime DEFAULT NULL,
   `hrs` int(11) DEFAULT NULL,
-  `response` text COLLATE utf8_unicode_ci,
+  `response` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `idTicketType` int(11) NOT NULL,
-  `idTicketStatus` int(11) NOT NULL DEFAULT '1',
+  `idTicketStatus` int(11) NOT NULL DEFAULT 1,
   `idUser` int(11) DEFAULT NULL,
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -10150,7 +10184,7 @@ CREATE TABLE `ticket_notes` (
   `note` text COLLATE utf8_unicode_ci NOT NULL,
   `idUser` int(11) NOT NULL,
   `idTicket` int(11) NOT NULL,
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -10162,7 +10196,7 @@ CREATE TABLE `ticket_notes` (
 CREATE TABLE `ticket_status` (
   `idTicketStatus` int(11) NOT NULL,
   `status` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -10186,7 +10220,7 @@ CREATE TABLE `ticket_type` (
   `idTicketType` int(11) NOT NULL,
   `type` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(300) COLLATE utf8_unicode_ci NOT NULL,
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -10213,7 +10247,7 @@ CREATE TABLE `tipocotizacion` (
   `idCotizacionCategoria` int(11) NOT NULL,
   `idCotizacionVolumen` int(11) NOT NULL,
   `horas` decimal(10,1) NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -10257,7 +10291,7 @@ CREATE TABLE `tipoproyecto` (
   `idProyectoServicio` int(11) DEFAULT NULL,
   `idComplejidad` int(11) NOT NULL,
   `horas` decimal(10,1) NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -10343,7 +10377,7 @@ CREATE TABLE `usuario` (
   `usuarioNombre` varchar(50) NOT NULL,
   `contrasena` varchar(50) NOT NULL,
   `activo` tinyint(1) NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp(),
   `idEmpleado` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -10424,11 +10458,11 @@ CREATE TABLE `usuarios_asignados` (
   `idUsuarioAsignado` int(11) NOT NULL,
   `idActividades_proyecto` int(11) NOT NULL,
   `idUsuario` int(11) NOT NULL,
-  `fechaInicio` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fechaInicio` datetime NOT NULL DEFAULT current_timestamp(),
   `fechaAprobacion` datetime DEFAULT NULL,
-  `motivoReq` text COLLATE utf8_unicode_ci,
-  `notas` text COLLATE utf8_unicode_ci,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `motivoReq` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `notas` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -10461,12 +10495,12 @@ CREATE TABLE `ventas` (
   `venta` decimal(15,2) DEFAULT NULL,
   `dueDate` datetime DEFAULT NULL,
   `idResponsable` int(11) DEFAULT NULL,
-  `approved` tinyint(1) NOT NULL DEFAULT '0',
+  `approved` tinyint(1) NOT NULL DEFAULT 0,
   `approvedBy` int(11) DEFAULT NULL,
   `approvedOn` datetime DEFAULT NULL,
-  `notas` text COLLATE utf8_unicode_ci,
+  `notas` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `createdBy` int(11) NOT NULL,
-  `fechaCrea` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fechaCrea` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -10927,6 +10961,14 @@ ALTER TABLE `proyecto_servicio`
   ADD PRIMARY KEY (`idProyectoServicio`);
 
 --
+-- Indices de la tabla `proyecto_soporte_adicional`
+--
+ALTER TABLE `proyecto_soporte_adicional`
+  ADD PRIMARY KEY (`idSoporteAdicional`),
+  ADD KEY `idProyecto` (`idProyecto`),
+  ADD KEY `idUsuario` (`idUsuario`);
+
+--
 -- Indices de la tabla `puesto`
 --
 ALTER TABLE `puesto`
@@ -11049,7 +11091,7 @@ ALTER TABLE `actividad_dependencia`
 -- AUTO_INCREMENT de la tabla `actividad_recursos_adicionales`
 --
 ALTER TABLE `actividad_recursos_adicionales`
-  MODIFY `idRecursosAdicionales` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=432;
+  MODIFY `idRecursosAdicionales` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=433;
 
 --
 -- AUTO_INCREMENT de la tabla `alternativo`
@@ -11266,6 +11308,12 @@ ALTER TABLE `proyecto_requester`
 --
 ALTER TABLE `proyecto_servicio`
   MODIFY `idProyectoServicio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT de la tabla `proyecto_soporte_adicional`
+--
+ALTER TABLE `proyecto_soporte_adicional`
+  MODIFY `idSoporteAdicional` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `puesto`
@@ -11521,20 +11569,18 @@ ALTER TABLE `privilegios`
 -- Filtros para la tabla `proyecto`
 --
 ALTER TABLE `proyecto`
-  ADD CONSTRAINT `proyecto_ibfk_1` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`idCliente`),
-  ADD CONSTRAINT `proyecto_ibfk_10` FOREIGN KEY (`idTipoProyecto`) REFERENCES `tipoproyecto` (`idTipoProyecto`),
-  ADD CONSTRAINT `proyecto_ibfk_11` FOREIGN KEY (`idRepreVentas`) REFERENCES `coe_performance_db_esp`.`empleado` (`idEmpleado`),
-  ADD CONSTRAINT `proyecto_ibfk_12` FOREIGN KEY (`idGerenteProyecto`) REFERENCES `usuario` (`idUsuario`),
-  ADD CONSTRAINT `proyecto_ibfk_13` FOREIGN KEY (`idLiderProyecto`) REFERENCES `usuario` (`idUsuario`),
-  ADD CONSTRAINT `proyecto_ibfk_14` FOREIGN KEY (`idIngenieroQA`) REFERENCES `usuario` (`idUsuario`),
-  ADD CONSTRAINT `proyecto_ibfk_15` FOREIGN KEY (`idCoordinadorProyecto`) REFERENCES `usuario` (`idUsuario`),
-  ADD CONSTRAINT `proyecto_ibfk_16` FOREIGN KEY (`idProyectoRequester`) REFERENCES `proyecto_requester` (`idProyectoRequester`),
-  ADD CONSTRAINT `proyecto_ibfk_3` FOREIGN KEY (`idStatus`) REFERENCES `status` (`idStatus`),
-  ADD CONSTRAINT `proyecto_ibfk_5` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`),
-  ADD CONSTRAINT `proyecto_ibfk_6` FOREIGN KEY (`idCuenta`) REFERENCES `cuenta` (`idCuenta`),
-  ADD CONSTRAINT `proyecto_ibfk_7` FOREIGN KEY (`idRespDiseno`) REFERENCES `empleado` (`idEmpleado`),
-  ADD CONSTRAINT `proyecto_ibfk_8` FOREIGN KEY (`idRespManu`) REFERENCES `empleado` (`idEmpleado`),
-  ADD CONSTRAINT `proyecto_ibfk_9` FOREIGN KEY (`currentStage`) REFERENCES `etapa` (`idEtapa`);
+  ADD CONSTRAINT `proyecto_ibfk_1` FOREIGN KEY (`idGerenteProyecto`) REFERENCES `usuario` (`idUsuario`),
+  ADD CONSTRAINT `proyecto_ibfk_10` FOREIGN KEY (`idRespManu`) REFERENCES `empleado` (`idEmpleado`),
+  ADD CONSTRAINT `proyecto_ibfk_11` FOREIGN KEY (`currentStage`) REFERENCES `etapa` (`idEtapa`),
+  ADD CONSTRAINT `proyecto_ibfk_12` FOREIGN KEY (`idRepreVentas`) REFERENCES `empleado` (`idEmpleado`),
+  ADD CONSTRAINT `proyecto_ibfk_2` FOREIGN KEY (`idLiderProyecto`) REFERENCES `usuario` (`idUsuario`),
+  ADD CONSTRAINT `proyecto_ibfk_3` FOREIGN KEY (`idIngenieroQA`) REFERENCES `usuario` (`idUsuario`),
+  ADD CONSTRAINT `proyecto_ibfk_4` FOREIGN KEY (`idCoordinadorProyecto`) REFERENCES `usuario` (`idUsuario`),
+  ADD CONSTRAINT `proyecto_ibfk_5` FOREIGN KEY (`idProyectoRequester`) REFERENCES `proyecto_requester` (`idProyectoRequester`),
+  ADD CONSTRAINT `proyecto_ibfk_6` FOREIGN KEY (`idStatus`) REFERENCES `status` (`idStatus`),
+  ADD CONSTRAINT `proyecto_ibfk_7` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`),
+  ADD CONSTRAINT `proyecto_ibfk_8` FOREIGN KEY (`idCuenta`) REFERENCES `cuenta` (`idCuenta`),
+  ADD CONSTRAINT `proyecto_ibfk_9` FOREIGN KEY (`idRespDiseno`) REFERENCES `empleado` (`idEmpleado`);
 
 --
 -- Filtros para la tabla `proyecto_aprobador_etapa`
@@ -11545,77 +11591,11 @@ ALTER TABLE `proyecto_aprobador_etapa`
   ADD CONSTRAINT `proyecto_aprobador_etapa_ibfk_3` FOREIGN KEY (`idRol`) REFERENCES `rol_aprobador` (`idRol`);
 
 --
--- Filtros para la tabla `proyecto_etapa`
+-- Filtros para la tabla `proyecto_soporte_adicional`
 --
-ALTER TABLE `proyecto_etapa`
-  ADD CONSTRAINT `proyecto_etapa_ibfk_1` FOREIGN KEY (`idProyecto`) REFERENCES `proyecto` (`idProyecto`),
-  ADD CONSTRAINT `proyecto_etapa_ibfk_2` FOREIGN KEY (`idEtapa`) REFERENCES `etapa` (`idEtapa`);
-
---
--- Filtros para la tabla `proyecto_notas`
---
-ALTER TABLE `proyecto_notas`
-  ADD CONSTRAINT `proyecto_notas_ibfk_1` FOREIGN KEY (`idProyecto`) REFERENCES `proyecto` (`idProyecto`),
-  ADD CONSTRAINT `proyecto_notas_ibfk_2` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`);
-
---
--- Filtros para la tabla `recursos_asignados`
---
-ALTER TABLE `recursos_asignados`
-  ADD CONSTRAINT `recursos_asignados_ibfk_1` FOREIGN KEY (`idEmpleado`) REFERENCES `empleado` (`idEmpleado`),
-  ADD CONSTRAINT `recursos_asignados_ibfk_2` FOREIGN KEY (`idActividades_proyecto`) REFERENCES `actividades_proyecto` (`idActividades_proyecto`);
-
---
--- Filtros para la tabla `ticket`
---
-ALTER TABLE `ticket`
-  ADD CONSTRAINT `ticket_ibfk_1` FOREIGN KEY (`idTicketType`) REFERENCES `ticket_type` (`idTicketType`),
-  ADD CONSTRAINT `ticket_ibfk_2` FOREIGN KEY (`idTicketStatus`) REFERENCES `ticket_status` (`idTicketStatus`),
-  ADD CONSTRAINT `ticket_ibfk_3` FOREIGN KEY (`idUser`) REFERENCES `usuario` (`idUsuario`);
-
---
--- Filtros para la tabla `ticket_notes`
---
-ALTER TABLE `ticket_notes`
-  ADD CONSTRAINT `ticket_notes_ibfk_1` FOREIGN KEY (`idTicket`) REFERENCES `ticket` (`idTicket`),
-  ADD CONSTRAINT `ticket_notes_ibfk_2` FOREIGN KEY (`idUser`) REFERENCES `usuario` (`idUsuario`);
-
---
--- Filtros para la tabla `tipocotizacion`
---
-ALTER TABLE `tipocotizacion`
-  ADD CONSTRAINT `tipocotizacion_ibfk_1` FOREIGN KEY (`idCotizacionCategoria`) REFERENCES `cotizacion_categoria` (`idCotizacionCategoria`),
-  ADD CONSTRAINT `tipocotizacion_ibfk_2` FOREIGN KEY (`idCotizacionVolumen`) REFERENCES `cotizacion_volumen` (`idCotizacionVolumen`);
-
---
--- Filtros para la tabla `tipoproyecto`
---
-ALTER TABLE `tipoproyecto`
-  ADD CONSTRAINT `tipoproyecto_ibfk_1` FOREIGN KEY (`idProyectoCategoria`) REFERENCES `proyecto_categoria` (`idProyectoCategoria`),
-  ADD CONSTRAINT `tipoproyecto_ibfk_2` FOREIGN KEY (`idComplejidad`) REFERENCES `complejidad` (`idComplejidad`),
-  ADD CONSTRAINT `tipoproyecto_ibfk_3` FOREIGN KEY (`idProyectoServicio`) REFERENCES `proyecto_servicio` (`idProyectoServicio`);
-
---
--- Filtros para la tabla `usuario`
---
-ALTER TABLE `usuario`
-  ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`idEmpleado`) REFERENCES `empleado` (`idEmpleado`);
-
---
--- Filtros para la tabla `usuarios_asignados`
---
-ALTER TABLE `usuarios_asignados`
-  ADD CONSTRAINT `usuarios_asignados_ibfk_1` FOREIGN KEY (`idActividades_proyecto`) REFERENCES `actividades_proyecto` (`idActividades_proyecto`),
-  ADD CONSTRAINT `usuarios_asignados_ibfk_2` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`);
-
---
--- Filtros para la tabla `ventas`
---
-ALTER TABLE `ventas`
-  ADD CONSTRAINT `ventas_ibfk_1` FOREIGN KEY (`idCotizacion`) REFERENCES `cotizacion` (`idCotizacion`),
-  ADD CONSTRAINT `ventas_ibfk_2` FOREIGN KEY (`approvedBy`) REFERENCES `usuario` (`idUsuario`),
-  ADD CONSTRAINT `ventas_ibfk_3` FOREIGN KEY (`idResponsable`) REFERENCES `empleado` (`idEmpleado`),
-  ADD CONSTRAINT `ventas_ibfk_4` FOREIGN KEY (`createdBy`) REFERENCES `usuario` (`idUsuario`);
+ALTER TABLE `proyecto_soporte_adicional`
+  ADD CONSTRAINT `proyecto_soporte_adicional_ibfk_1` FOREIGN KEY (`idProyecto`) REFERENCES `proyecto` (`idProyecto`),
+  ADD CONSTRAINT `proyecto_soporte_adicional_ibfk_2` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

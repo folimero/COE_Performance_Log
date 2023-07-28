@@ -716,4 +716,176 @@
       }
       return false;
     }
+
+    function addAditionalSupport(id){
+        event.preventDefault();
+        var isUser = $('#selectUser').val();
+        var horas = $('#hours').val();
+        var fechaSoporte = $('#fechaSoporte').val();
+
+        if (!isUser) {
+            alert("Please select Supporter");
+        } else {
+            if (!horas) {
+                alert("Please select Hours (Min 1)");
+            } else if (!fechaSoporte){
+                alert("Please select Support Date");
+            } else {
+                $.ajax({
+                    url: '../../js/ajax.php',
+                    type: 'POST',
+                    async: true,
+                    data: {
+                        accion: 'agregarSoporte',
+                        idPoryecto: id,
+                        horas: horas,
+                        fechaSoporte: fechaSoporte,
+                        idUsuario: isUser
+                    },
+                    success: function(response) {
+                        // console.log(response);
+                        if (!response != "error") {
+                            $('#selectUser').prop("selectedIndex", 0);
+                            $('#hours').val('') ;
+                            
+                            mostrarAlerta('success', 'Resource Added!.');
+
+                            var info = JSON.parse(response);
+                            if (info.result) {
+
+                                $('#tbodySupport') // select table tbody
+                                .append(addTableRowSupport(info.result.idSoporteAdicional, info.result.eNombre, info.result.horas, info.result.fechaSoporte)) // apend table row
+                            }
+                        } else {
+                            console.log("ERROR");
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+        }
+    }
+
+    function deleteSupport(sender){
+        event.preventDefault();
+        if (confirm("Are you sure to delete Aditional Support?")) {
+            var trObj = $(sender).closest("tr");
+            var idSoporteAdicional = trObj.attr('id');
+
+            $.ajax({
+                type:'POST',
+                url:'../../js/ajax.php',
+                async: true,
+                data: {
+                  accion: 'eliminarSoporte',
+                  idSoporteAdicional: idSoporteAdicional
+                },
+                // data: 'accion=editarEnsamble',
+                success:function(response) {
+                    var info = JSON.parse(response);
+
+                    if (info.result == "deleted") {
+                        trObj.remove();
+                        mostrarAlerta("success","Support Deleted");
+                    }else {
+                        mostrarAlerta("danger","Cannot Delete Support");
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+    }
+
+    function addTableRowSupport(idSoporteAdicional, eNombre, horas, fechaSoporte) {
+        var newRow =  "<tr id='" + idSoporteAdicional + "'>" +
+                          "<td>" + eNombre + "</td>" +
+                          "<td><span class='editSpan horas'>" + horas + "</span>" +
+                          "<input class='editInput horas' type='number' name='horas' value='" + horas + "' style='display: none;' step='1' min='1'></td>" +                          
+                          "<td><span class='editSpan fechaSoporte'>" + fechaSoporte + "</span>" +
+                          "<input class='editInput fechaSoporte' type='date' name='fechaSoporte' value='" + fechaSoporte + "' style='display: none;'></td>" +
+                      
+                          "<td><span class='editSpan comentarios'></span>" +
+                          "<input class='editInput comentarios' type='text' name='comentarios' value='' style='display: none;'></td>" +
+                          "<td>" +
+                              "<div class='' style='display: flex; justify-content: space-evenly;'>" +
+                                  "<a class='editBtn' href='#' onclick='editMode(this)'>" +
+                                      "<div class='icon-container'>" +
+                                          "<div class='plus-icon-yellow'></div>" +
+                                      "</div>" +
+                                  "</a>" +
+                                  "<a class='editBtn ms-2' href='#' onclick='deleteSupport(this)' style='display: flex; justify-content: space-evenly; align-items: center;'>" +
+                                      "<i class='fa fa-trash fa-2x' style='color: red;'></i>" +
+                                  "</a>" +
+                                  "<a class='guardarBtn' href='#' onclick='editarSoporteAdicional(this)' style='display: none;'>" +
+                                      "<div class='icon-container'>" +
+                                          "<div class='plus-icon-green'></div>" +
+                                      "</div>" +
+                                  "</a>" +
+                                  "<a class='deleteBtn' href='#' onclick='cancel(this)' style='display: none;'>" +
+                                      "<div class='icon-container'>" +
+                                          "<div class='cross-icon'></div>" +
+                                      "</div>" +
+                                  "</a>" +
+                              "</div>" +
+                          "</td>" +
+                      "</tr>";
+        return newRow;
+    }
+
+    function editarSoporteAdicional(sender){
+        event.preventDefault();
+        var trObj = $(sender).closest("tr");
+        var idSoporteAdicional = $(sender).closest("tr").attr('id');
+        var horas = trObj.find(".editInput.horas").val();
+        var fechaSoporte = trObj.find(".editInput.fechaSoporte").val();
+        var comentarios = trObj.find(".editInput.comentarios").val();
+
+        if (!fechaSoporte) {
+            fechaSoporte = null;
+        }
+        // return alert(fechaRequerida);
+        // alert(notas);
+        $.ajax({
+          type: 'POST',
+          url: '../../js/ajax.php',
+          async: true,
+          data: {
+            accion: 'editarSoporteAdicional',
+            idSoporteAdicional: idSoporteAdicional,
+            horas: horas,
+            fechaSoporte: fechaSoporte,
+            comentarios: comentarios,
+          },
+          // data: 'accion=editarActUbicacion',
+          success: function(response) {
+              var info = JSON.parse(response);
+              console.log(info);
+              if (info.result) {
+                  trObj.find(".editSpan.horas").text(info.result.horas);
+                  trObj.find(".editSpan.fechaSoporte").text(info.result.fechaSoporte);
+                  trObj.find(".editSpan.comentarios").text(info.result.comentarios);
+
+                  trObj.find(".editInput.horas").text(info.result.horas);
+                  trObj.find(".editInput.fechaSoporte").text(info.result.fechaSoporte);
+                  trObj.find(".editInput.comentarios").text(info.result.comentarios);
+
+                  trObj.find(".editInput").hide();
+                  trObj.find(".guardarBtn").hide();
+                  trObj.find(".deleteBtn").hide();
+                  trObj.find(".editSpan").show();
+                  trObj.find(".editBtn").show();
+                  mostrarAlerta('success', 'Changes made.');
+              } else {
+                  alert(response.result);
+              }
+          },
+          error: function(error) {
+              console.log(error);
+          }
+        });
+    }
 </script>

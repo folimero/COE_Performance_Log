@@ -601,7 +601,8 @@
 <!-- Seccion de Tabs -->
 <div class="tab">
   <button class="tablinks" onclick="openSubtab(event, 'actividades')" id="defaultOpen">Activities</button>
-  <button class="tablinks" onclick="openSubtab(event, 'recursosAdicionales')">Aditional Resources</button>
+  <button class="tablinks" onclick="openSubtab(event, 'recursosAdicionales')">Activities Aditional Resources</button>
+  <button class="tablinks" onclick="openSubtab(event, 'soporteAdicional')">Project Aditional Support</button>
   <button class="tablinks" onclick="openSubtab(event, 'ensambles')">Assemblies</button>
   <button class="tablinks" onclick="openSubtab(event, 'Actividad')">Record</button>
 </div>
@@ -751,7 +752,7 @@
   <!-- <h1 class="col-12 text-center danger">TESTING BY DEVELOPER, PLEASE DONT MOVE THIS SECTION!!!</h1> -->
 
   <div class="container card rounded shadow col-6 p-4">
-      <h1 class=" text-center">Aditional Resources</h1>
+      <h1 class=" text-center">Activities Aditional Resources</h1>
       <div class="row">
           <div class="col-6">
               <select id="selectActivity">
@@ -857,6 +858,121 @@
                                       <i class='fa fa-trash fa-2x' style='color: red;'></i>
                                   </a>
                                   <a class='guardarBtn' href='#' onclick='editarRecursoAdicional(this)' style='display: none;'>
+                                      <div class='icon-container'>
+                                          <div class='plus-icon-green'></div>
+                                      </div>
+                                  </a>
+                                  <a class='deleteBtn' href='#' onclick='cancel(this)' style='display: none;'>
+                                      <div class='icon-container'>
+                                          <div class='cross-icon'></div>
+                                      </div>
+                                  </a>
+                              </div>
+                          </td>";
+                    echo "</tr>";
+                }
+            ?>
+        </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="soporteAdicional" class="tabcontent">
+  <!-- <h1 class="col-12 text-center danger">TESTING BY DEVELOPER, PLEASE DONT MOVE THIS SECTION!!!</h1> -->
+
+  <div class="container card rounded shadow col-8 p-4">
+      <h1 class=" text-center">Project Aditional Support</h1>
+      <div class="row">
+          <div class="col-4">
+            <label for="selectUser">Usuario:</label>
+            <select id="selectUser">
+                <option disabled selected value>Select Project Support</option>
+                <?php
+                    $stmt = $dbh->prepare("SELECT e.numEmpleado AS eNum, u.idUsuario, e.nombre AS eNombre
+                                            FROM usuario AS u
+                                            INNER JOIN empleado AS e
+                                            ON u.idEmpleado = e.idEmpleado
+                                            WHERE e.activo = 1 AND u.activo = 1 AND e.idDepartamento IN (1,2,3,5,6,7,8,9,10,11)");
+                    $stmt->execute();
+                    while ($resultado = $stmt->fetch()) {
+                        echo '<option value="' . $resultado->idUsuario . '">' . $resultado->eNum . " - ". $resultado->eNombre . '</option>';
+                    }
+                ?>
+            </select>
+          </div>
+          <div class="col-4">
+            <div class="input-field">
+                <label for="hours">Hours:</label>
+                <input type="number" id="hours" name="hours" min="1" step="1" required>
+            </div>
+          </div>
+          <div class="col-4">
+              <div class="inline-container">
+                <div class="input-field">
+                    <label for="fechaSoporte">Support Date:</label>
+                    <input type="date" id="fechaSoporte" name="fechaSoporte" value="" min="2017-01-01">
+                </div>
+                <a href='#' onclick="addAditionalSupport(<?php echo $id; ?>)" style='margin-top: auto; padding-bottom: 8px;'>
+                    <div class='icon-container' style='margin-left: 10px;'>
+                        <div class='plus-icon'></div>
+                    </div>
+                </a>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="col-12" style="margin-top: 20px;">
+    <table id="myTableSupport" class="table w-100">
+      <thead>
+        <!-- Encabezados de tabla -->
+        <tr>
+            <!-- <th>ID</th> -->
+            <th>Support</th>
+            <th>Hours</th>
+            <th>In</th>
+            <th>Comments</th>
+            <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tbodySupport">
+      <?php
+                $stmt = $dbh->prepare("SELECT psa.idSoporteAdicional, e.nombre AS eNombre, psa.horas, DATE(psa.fechaSoporte) AS fechaSoporte, psa.comentarios
+                                      FROM proyecto_soporte_adicional AS psa
+                                      INNER JOIN proyecto AS p
+                                      ON psa.idProyecto = p.idProyecto
+                                      INNER JOIN usuario AS u
+                                      ON psa.idUsuario = u.idUsuario
+                                      INNER JOIN empleado AS e
+                                      ON u.idEmpleado = e.idEmpleado
+                                      WHERE p.idProyecto = $id");
+                $stmt->execute();
+
+                // Se prepara la consulta para obtener las calificaciones del estudiante desde la BD
+                // $stmt = $dbh->prepare("SELECT * FROM calificaciones WHERE matricula=:matricula");
+                // $stmt->bindParam(':matricula', $_SESSION["matricula"]);
+                // $stmt->execute();
+                while ($resultado = $stmt->fetch()) {
+                    echo "<tr id='" . $resultado->idSoporteAdicional . "'>";
+                    // echo "<td>" . $resultado->idEnsamble . "</td>";
+                    echo "<td>" . $resultado->eNombre . "</td>";
+                    echo "<td><span class='editSpan horas'>" . $resultado->horas . "</span>";
+                    echo "<input class='editInput horas' type='number' name='horas' value='" . $resultado->horas . "' style='display: none;' step='1' min='1'></td>";
+                    echo "<td><span class='editSpan fechaSoporte'>" . $resultado->fechaSoporte . "</span>";
+                    echo "<input class='editInput fechaSoporte' type='date' name='fechaSoporte' value='" . $resultado->fechaSoporte . "' style='display: none;'></td>";
+                    echo "<td><span class='editSpan comentarios'>" . $resultado->comentarios . "</span>";
+                    echo "<input class='editInput comentarios' type='text' name='comentarios' value='" . $resultado->comentarios . "' style='display: none;'></td>";
+                    echo "<td>
+                              <div class='' style='display: flex; justify-content: space-evenly;'>
+                                  <a class='editBtn' href='#' onclick='editMode(this)'>
+                                      <div class='icon-container'>
+                                          <div class='plus-icon-yellow'></div>
+                                      </div>
+                                  </a>
+                                  <a class='editBtn ms-2' href='#' onclick='deleteSupport(this)' style='display: flex; justify-content: space-evenly; align-items: center;'>
+                                      <i class='fa fa-trash fa-2x' style='color: red;'></i>
+                                  </a>
+                                  <a class='guardarBtn' href='#' onclick='editarSoporteAdicional(this)' style='display: none;'>
                                       <div class='icon-container'>
                                           <div class='plus-icon-green'></div>
                                       </div>

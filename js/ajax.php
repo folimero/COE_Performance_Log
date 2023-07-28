@@ -340,7 +340,43 @@
           } catch (\Exception $e) {
               alert($e);
           }
-      } elseif ($_POST['accion'] == 'agregarRecurso') {
+      } elseif ($_POST['accion'] == 'agregarSoporte') {
+        try {
+            $idPoryecto = cleanInput($_POST['idPoryecto']);
+            $horas = cleanInput($_POST['horas']);
+            $fechaSoporte = cleanInput($_POST['fechaSoporte']);
+            $idUsuario = cleanInput($_POST['idUsuario']);
+
+            // Funcion para llenar Selector de puesto de formulario
+            $stmt = $dbh-> prepare("INSERT INTO proyecto_soporte_adicional (idProyecto, idUsuario, fechaSoporte, horas)
+                                    VALUES (?, ?, ?, ?)");
+            // Se asignan los valores a la consulta preparada
+            $stmt->bindParam(1, $idPoryecto);
+            $stmt->bindParam(2, $idUsuario);
+            $stmt->bindParam(3, $fechaSoporte);
+            $stmt->bindParam(4, $horas);
+
+            $stmt->execute();
+            $data = array();
+
+            $idInserted = $dbh->lastInsertId();
+            $stmt2 = $dbh-> prepare("SELECT psa.idSoporteAdicional, e.nombre AS eNombre, psa.horas, DATE(psa.fechaSoporte) AS fechaSoporte, psa.comentarios
+                                        FROM proyecto_soporte_adicional AS psa
+                                        INNER JOIN proyecto AS p
+                                        ON psa.idProyecto = p.idProyecto
+                                        INNER JOIN usuario AS u
+                                        ON psa.idUsuario = u.idUsuario
+                                        INNER JOIN empleado AS e
+                                        ON u.idEmpleado = e.idEmpleado
+                                        WHERE psa.idSoporteAdicional = $idInserted");
+            $stmt2->execute();
+            $data['result'] = $stmt2->fetch();
+
+            echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        } catch (\Exception $e) {
+            $data['result'] = "error";
+        }
+    } elseif ($_POST['accion'] == 'agregarRecurso') {
           try {
               $idActividades_proyecto = cleanInput($_POST['idActividades_proyecto']);
               $idUsuario = cleanInput($_POST['idUsuario']);
@@ -1724,7 +1760,28 @@
                 echo json_encode($data, JSON_UNESCAPED_UNICODE);
                 alert($e);
             }
-      } elseif ($_POST['accion'] == 'editarRecurso') {
+      } elseif ($_POST['accion'] == 'editarSoporteAdicional') {
+        try {
+            $id = cleanInput($_POST['idSoporteAdicional']);
+            $horas = cleanInput($_POST['horas']);
+            $fechaSoporte = cleanInput($_POST['fechaSoporte']);
+            $comentarios = cleanInput($_POST['comentarios']);
+
+            $stmt = $dbh->prepare("UPDATE proyecto_soporte_adicional SET horas = '$horas', fechaSoporte = '$fechaSoporte', comentarios = '$comentarios'
+                                    WHERE idSoporteAdicional  = $id");
+            $stmt->execute();
+            $stmt2 = $dbh-> prepare("SELECT DATE(fechaSoporte) AS fechaSoporte, horas, comentarios
+                                     FROM proyecto_soporte_adicional
+                                     WHERE idSoporteAdicional = $id");
+            $stmt2->execute();
+            $data['result'] = $stmt2->fetch();
+            echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        } catch (\Exception $e) {
+            $data['result'] = "error";
+            echo json_encode($data, JSON_UNESCAPED_UNICODE);
+            alert($e);
+        }
+  }  elseif ($_POST['accion'] == 'editarRecurso') {
             try {
                 $id = cleanInput($_POST['idRecurso']);
                 $fechaInicio = cleanInput($_POST['fechaInicio']);
@@ -2092,7 +2149,27 @@
                 $data['result'] = "error";
                 echo json_encode($data, JSON_UNESCAPED_UNICODE);
             }
-      }
+      } elseif ($_POST['accion'] == 'eliminarSoporte') {
+            $id = cleanInput($_POST['idSoporteAdicional']);
+
+            $data = array();
+            try {
+                // Funcion para llenar Selector de puesto de formulario
+                $stmt = $dbh-> prepare("DELETE FROM proyecto_soporte_adicional
+                WHERE idSoporteAdicional = $id");
+                $stmt->execute();
+
+                if ($stmt->rowCount() > 0) {
+                    $data['result'] = "deleted";
+                }else {
+                    $data['result'] = "error";
+                }
+                echo json_encode($data, JSON_UNESCAPED_UNICODE);
+            } catch (\Exception $e) {
+                $data['result'] = "error";
+                echo json_encode($data, JSON_UNESCAPED_UNICODE);
+            }
+        }
   }
 
   exit;

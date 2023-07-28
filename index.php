@@ -2,6 +2,7 @@
 
 <div class="flex-container">
   <h1>Index Page</h1>
+  <p>V1.0</p>
 </div>
 
 <!-- VENTANAS MODALES -->
